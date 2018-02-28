@@ -12,8 +12,6 @@ from .models import List
 # misc
 import datetime
 
-from django.views.decorators.csrf import csrf_exempt
-
 
 def login_attempt(request):
     password = request.POST.get('password')
