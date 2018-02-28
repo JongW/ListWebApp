@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+    <form method="post" id="login"> {% csrf_token %}
+        <input type="text" name="username" id="username">
+        <input type="text" name="password" id="password">
+        <input type="submit" value="input">
+    </form>
+
+    <p>{{ message }}</p>
+    {% load static %}
+    <button><a href="{% url 'create' %}"> new user</a></button>
+
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TodoList</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static  'home/mainList.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script>
+        // using jQuery
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        var csrftoken = getCookie('csrftoken');
+
+        function myFunction(value) {
+            $.ajax({
+                headers: {"X-CSRFToken": getCookie("csrftoken")},
+                type: "POST",
+                {% load static %}
+                url: "{%url 'home'%}",
+                data: {
+                    id: value
+                },
+                success: function () {
+                    location.reload();
+                },
+            });
+        }
+
+    </script>
+</head>
+<body>
+<h1> TodoList </h1>
+{#<form method="post" id="search">#}
+{#    <input type="text" name="searchBox" id="searchBox">#}
+{#    <input type="submit" value="Search">#}
+{#</form>#}
+
+{% if todo_array %}
+    <ul>
+        {% for TodoList in todo_array %}
+            <li class="listItems" name="listItem" id="item{{ forloop.counter }}"
+                onClick="myFunction({{ forloop.counter }})">
+                {{ TodoList.todo_text }}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p> Add some Todo's !! </p>
+{% endif %}
+
+
+<form method="post" id="input"> {% csrf_token %}
+    <input type="text" name="inputBox" id="inputBox">
+    <input type="submit" value="input">
+</form>
+
+{% load static %}
+
+<form method="post" value="logout">
+<button><a href="{% url 'logout' %}">logout</a></button>
+</form>
+</body>
+</html>
